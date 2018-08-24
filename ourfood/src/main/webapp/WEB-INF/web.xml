@@ -2,11 +2,28 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>ourfood</display-name>
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>404.jsp</welcome-file>
+    <welcome-file>500.jsp</welcome-file>
   </welcome-file-list>
+  
+   <!-- spring 负责分发请求的 Servlet -->
+  	<servlet>
+		<servlet-name>mvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<!-- 
+				classpath 表示从当前项目类路径查找配置文件
+				classpath* 表示从当前类路径和依赖 jar包的类路径中查找配置文件
+			 -->
+			<param-value>classpath*:/beans.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mvc</servlet-name>
+		<!-- 加个后缀，方便拦截动态请求 -->
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
 </web-app>
