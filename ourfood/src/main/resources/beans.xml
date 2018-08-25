@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd
+     http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:component-scan base-package="com.ourfood"></context:component-scan>
+	
+	<!-- spring mvc 视图解析器 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- 静态处理问题 -->
+	<mvc:default-servlet-handler/>
+	<!-- mvc注解驱动 -->
+	<mvc:annotation-driven/>
+	
+	<!-- 数据源 dbcp连接池 spring自带数据源org.springfranework.jdbc.datasource.DriverManagerDataSource -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/ourfood?useUnicode=true&amp;characterEncoding=UTF-8"/> 
+		<property name="username" value="root" />
+		<property name="password" value="a" />
+	</bean>
+
+	<!-- 创建mybatis会话工厂(MyBatisUtils) 加载方法： 1、直接读取mybatis配置文件（数据源、Mapper） 2、直接在mybatis配置 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="mapperLocations" value="com/favorite/dao/*.xml" /> -->
+	</bean>
+
+	<!-- MyBati数据访问接口接口 1、为每一个dao接口配置一个bean -->
+	<!-- <bean id="accountDao" class="org.mybatis.spring.mapper.MapperFactoryBean"> 
+			<property name="mapperInterface" value="com.yc.spring.bank.dao.AccountMapper"/> 
+			<property name="sqlSessionFactory" ref="sqlSessionFactory"/> 
+		</bean> 
+		<bean id="recordDao" class="org.mybatis.spring.mapper.MapperFactoryBean"> 
+			<property name="mapperInterface" value="com.yc.spring.bank.dao.RecordMapper"/> 
+			<property name="sqlSessionFactory" ref="sqlSessionFactory"/> 
+		</bean> -->
+
+	<!-- 2、统一配置接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ourfood.dao" />
+	</bean>
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 所有get开头的方法 --> 
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" isolation="DEFAULT" propagation="REQUIRED" 
+				rollback-for="BizException" no-rollback-for=""/>
+			<tx:method name="*" 
+				isolation="DEFAULT"
+				timeout="-1"
+			/>
+			<!--read-only	 只读
+				isolation 	隔离级别：数据库的配置
+				propagation	传播机制：默认 required、required_new
+				timeout		事务超时 
+				rollback-for="BizException" spring的回滚机制(运行期异常RuntimeException默认)
+				no-rollback-for="NullPiontException"-->
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="txA" expression="execution(* com.ourfood.biz.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txA" />
+	</aop:config>
+	
+
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	
+</beans>
