@@ -23,7 +23,6 @@ public class VerifyCodeUtils{
     public static final String VERIFY_CODES = "1234567890ABCDEFGHJKLMNPQRSTUVWXYZ";
     private static Random random = new Random();
  
- 
     public static String generateVerifyCode(int verifySize){
         return generateVerifyCode(verifySize, VERIFY_CODES);
     }

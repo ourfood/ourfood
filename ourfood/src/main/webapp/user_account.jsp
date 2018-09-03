@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +16,13 @@
 		<section class="Topmenubg">
 			<div class="Topnav">
 				<div class="LeftNav">
-					<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					<c:if test="${sessionScope.user==null }">
+						<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					</c:if>
+					<c:if test="${sessionScope.user!=null }">
+						<a href="user_center.jsp">您好,<span>${user.username }</span></a>
+
+					</c:if>
 				</div>
 				<div class="RightNav">
 					<a href="user_center.jsp">用户中心</a> <a href="user_orderlist.jsp"
@@ -25,9 +32,7 @@
 		</section>
 		<div class="Logo_search">
 			<div class="Logo">
-				<img src="images/logo.jpg" title="DeathGhost" alt="模板"> <i></i>
-				<span>西安市 [ <a href="#">莲湖区</a> ]
-				</span>
+				<img src="images/logo.jpg" title="ourfood" alt="模板"> <i></i>
 			</div>
 			<div class="Search">
 				<form action="selectFood.do" id="main_a_serach" method="POST">
@@ -72,35 +77,19 @@
 			<!--user Account-->
 			<section class="AccManage Overflow">
 				<span class="AMTitle Block Font14 FontW Lineheight35">账户管理</span>
-				<p>
-					登陆邮箱：232***413@qq.com ( <a href="#" target="_blank">更换手机号码</a> )
-				</p>
-				<p>
-					手机号码：183****5673 ( <a href="#" target="_blank">更换手机号码</a> ) ( <a
-						href="#" target="_blank">解绑手机</a> )
-				</p>
-				<p>
-					上次登陆：2014年09月22日 11:40:36( *如非本人登陆，请立即<a href="#" target="_blank">修改您的密码</a>！
-					)
-				</p>
 				<form>
 					<table>
 						<tr>
-							<td width="30%" align="right">*修改头像：</td>
-							<td><input name="" type="file">
-							<button>确定</button></td>
-						</tr>
-						<tr>
-							<td width="30%" align="right">*昵称：</td>
-							<td><input type="text" name="" value="DeathGhost"></td>
+							<td width="30%" align="right">*用户：</td>
+							<td><input type="text" name="" value="${user.username }"></td>
 						</tr>
 						<tr>
 							<td width="30%" align="right">*邮箱：</td>
-							<td><input type="email" name="" value="232650413@qq.com"></td>
+							<td><input type="email" name="" value="${user.email }"></td>
 						</tr>
 						<tr>
 							<td width="30%" align="right">*手机：</td>
-							<td><input type="tel" name="" value="18309275673"></td>
+							<td><input type="tel" name="" value="${user.photo }"></td>
 						</tr>
 						<tr>
 							<td></td>

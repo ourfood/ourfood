@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,22 +12,27 @@
 <script type="text/javascript" src="js/jqpublic.js"></script>
 </head>
 <body>
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		function changecode() {
 			document.getElementById('vcode.do');
 		}
-	</script>
+	</script> -->
 
 	<header>
 		<section class="Topmenubg">
 			<div class="Topnav">
 				<div class="LeftNav">
-					<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					<c:if test="${sessionScope.user==null }">
+						<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					</c:if>
+					<c:if test="${sessionScope.user!=null }">
+						<a href="user_center.jsp">您好,<span>${user.username }</span></a>
+
+					</c:if>
 				</div>
 				<div class="RightNav">
 					<a href="user_center.jsp">用户中心</a> <a href="user_orderlist.jsp"
 						target="_blank" title="我的订单">我的订单</a> <a href="cart.jsp">购物车（0）</a>
-					<a href="user_favorites.jsp" target="_blank" title="我的收藏">我的收藏</a>
 				</div>
 			</div>
 		</section>
@@ -63,7 +69,7 @@
 	</header>
 	<!--Start content-->
 	<section class="Psection MT20">
-		<form action="login.do">
+		<form action="login.do" method="POST">
 			<table class="login">
 				<tr>
 					<td width="40%" align="right" class="FontW">账号：</td>

@@ -1,8 +1,10 @@
 package com.ourfood.web.action;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +16,7 @@ import com.ourfood.util.VerifyCodeUtils;
 public class VcodeAction {
 	
 	@RequestMapping("vcode.do")
-	protected void vcode(Model model, HttpServletResponse response) throws IOException
+	protected void vcode(Model model, HttpServletResponse response, HttpSession session) throws IOException
 			{
 		/**
 		* 页面中图片的设置
@@ -29,7 +31,7 @@ public class VcodeAction {
 		/**
 		 * 将验证码添加到会话中，注意：在会话中保存的验证码的名称 vscode
 		 */
-		model.addAttribute("vscode",verifyCode);
+		session.setAttribute("vscode", verifyCode);
 		// 图形写给浏览器  
 		response.setContentType("image/jpeg");
 		// 发头控制浏览器不要缓存  
@@ -39,6 +41,20 @@ public class VcodeAction {
 		// 输出图片
 		VerifyCodeUtils.outputImage(w, h, response.getOutputStream(), verifyCode);
 
+	}
+	
+	@RequestMapping("checkCode.do")
+	public void checkCode(String code, HttpSession session, PrintWriter out) {
+		
+		String vscode = (String) session.getAttribute("vscode");
+		System.out.println("----------" + vscode);
+		System.out.println("-----2-----" + code);
+
+		if(code == vscode || code.equals(vscode)) {
+			out.print("OK");
+		} else {
+		}
+		
 	}
 
 	

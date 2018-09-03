@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +17,13 @@
 		<section class="Topmenubg">
 			<div class="Topnav">
 				<div class="LeftNav">
-					<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					<c:if test="${sessionScope.user==null }">
+						<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					</c:if>
+					<c:if test="${sessionScope.user!=null }">
+						<a href="user_center.jsp">您好,<span>${user.username }</span></a>
+
+					</c:if>
 				</div>
 				<div class="RightNav">
 					<a href="user_center.jsp">用户中心</a> <a href="user_orderlist.jsp"
@@ -63,7 +71,7 @@
 				<li><i></i><a href="user_address.jsp">收货地址</a></li>
 				<li><i></i><a href="user_message.jsp">我的留言</a></li>
 				<li><i></i><a href="user_account.jsp">账户管理</a></li>
-				<li><i></i><a href="#">安全退出</a></li>
+				<li><i></i><a href="logout.do">安全退出</a></li>
 			</ul>
 		</nav>
 		<article class="U-article Overflow">

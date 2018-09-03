@@ -1,26 +1,59 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
 <title>注册</title>
-<meta name="keywords"
-	content="DeathGhost,DeathGhost.cn,web前端设,移动WebApp开发" />
-<meta name="description" content="DeathGhost.cn::H5 WEB前端设计开发!" />
-<meta name="author" content="DeathGhost" />
 <link href="style/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/public.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jqpublic.js"></script>
 
 </head>
+
+	<script type="text/javascript">
+	function checkpwd() {
+		var userpwd = $("#userpwd").val();
+		var repwd = $("#repwd").val();
+		if (userpwd != repwd) {
+			alert("两次次输入的密码不一致");
+		} else {
+		}
+	}
+	
+	 function checkCode(){
+		var code=$("#vcode").val();
+		console.log(code);
+		$.post("checkCode.do",{
+			code:code
+		},function(data){
+			if (data == "OK") {
+				
+			} else {
+				alert("验证码错误");
+				/* window.location.reload(); */
+			}
+		});
+
+	} 
+	</script>
+
 <body>
+
 	<header>
 		<section class="Topmenubg">
 			<div class="Topnav">
 				<div class="LeftNav">
-					<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					<c:if test="${sessionScope.user==null }">
+						<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					</c:if>
+					<c:if test="${sessionScope.user!=null }">
+						<a href="user_center.jsp">您好,<span>${user.username }</span></a>
+
+					</c:if>
 				</div>
 				<div class="RightNav">
 					<a href="user_center.jsp">用户中心</a> <a href="user_orderlist.jsp"
@@ -62,7 +95,7 @@
 	</header>
 	<!--Start content-->
 	<section class="Psection MT20">
-		<form action="register.do">
+		<form action="register.do" method="POST" >
 			<table class="Register">
 				<tr>
 					<td width="40%" align="right" class="FontW">用户名：</td>
@@ -70,11 +103,12 @@
 				</tr>
 				<tr>
 					<td width="40%" align="right" class="FontW">密码：</td>
-					<td><input type="password" name="userpwd" required></td>
+					<td><input type="password" id="userpwd" name="userpwd" required></td>
 				</tr>
 				<tr>
 					<td width="40%" align="right" class="FontW">再次确认：</td>
-					<td><input type="password" name="repwd" required></td>
+					<td><input type="password" id="repwd" name="repwd" onblur="checkpwd()"
+						required></td>
 				</tr>
 				<tr>
 					<td width="40%" align="right" class="FontW">电子邮件：</td>
@@ -87,14 +121,16 @@
 				</tr>
 				<tr>
 					<td width="40%" align="right" class="FontW">验证码：</td>
-					<td><input type="text" name="vcode" required> <img
-						src="vcode.do" style="margin-left: 8px; vertical-align: bottom"
-						width="83" height="36" onclick=""></td>
+					<td><input type="text" id="vcode" name="vcode" onblur="checkCode()"
+						required> 
+						<img src="vcode.do"
+						style="margin-left: 8px; vertical-align: bottom" width="83"
+						height="36" onclick="changeCode()"></td>
 
 				</tr>
 				<tr>
 					<td width="40%" align="right"></td>
-					<td><input type="submit" name="" class="Submit_b" value="注 册">(
+					<td><input type="submit" name="" class="Submit_b" value="注 册" >(
 						已经是会员，<a href="login.jsp" class="BlueA">请登录</a> )</td>
 				</tr>
 			</table>
@@ -108,9 +144,7 @@
 		</div>
 	</footer>
 
-	<script type="text/javascript">
-		
-	</script>
+
 
 </body>
 </html>

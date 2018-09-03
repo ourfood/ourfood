@@ -16,4 +16,11 @@ public interface FoodDao {
 	 */
 	@Select("select * from food where fname like concat('%',#{fname},'%') ")
 	List<Food> selectByFname(String fname);
+	/**
+	 * 菜品详情查询
+	 * @param food
+	 * @return
+	 */
+	@Select("select * from food where fname =#{fname}")
+	List<Food> selectDetail(Food food);
 }

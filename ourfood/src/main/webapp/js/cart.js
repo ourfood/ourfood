@@ -61,7 +61,7 @@ function GetCount() {
 	$("#jz1").css("display", "none");
 	$("#jz2").css("display", "block");
 }
-//ADD:对删除链接进行处理2014-9-20DeathGhost
+//ADD:对删除链接进行处理2014-9-20
     $(document).ready(function(){
 		$("#delcart1").click(function(){
 			$("#table1").remove();
@@ -96,7 +96,7 @@ function GetCount() {
 		})
 		$("#min1").click(function () {
 			t.val(parseInt(t.val()) - 1)
-			t.val(1)//初始值防止为负数ADD deathghost
+			t.val(1)//初始值防止为负数ADD 
 			setTotal(); GetCount();
 		})
 		function setTotal() {

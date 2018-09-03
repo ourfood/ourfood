@@ -14,11 +14,18 @@
 <script type="text/javascript" src="js/jqpublic.js"></script>
 </head>
 <body>
+
 	<header>
 		<section class="Topmenubg">
 			<div class="Topnav">
 				<div class="LeftNav">
-					<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					<c:if test="${sessionScope.user==null }">
+						<a href="register.jsp">注册</a>/<a href="login.jsp">登录</a>
+					</c:if>
+					<c:if test="${sessionScope.user!=null }">
+						<a href="user_center.jsp">您好,<span>${user.username }</span></a>
+
+					</c:if>
 				</div>
 				<div class="RightNav">
 					<a href="user_center.jsp">用户中心</a> <a href="user_orderlist.jsp"
@@ -63,20 +70,19 @@
 			<section class="Fslmenu slt" style="margin-bottom: 5px"></section>
 			<ul class="Overflow">
 				<c:forEach items="${list}" var="food">
-				<li><a href="detailsp.jsp" target="_blank" target="_blank"
-					title="${food.fname }"><img src="images/${food.fphoto }"></a>
-					<p class="P-price FontW Font16">
-						<span>￥${food.fprice }</span>
-					</p>
-					<p class="P-title">
-						<a href="detailsp.jsp" target="_blank" target="_blank"
-							title="${food.fname }">${food.fname }</a>
-					</p>
-					<p class="P-shop Overflow">
-						<span class="sa"><a href="shop.jsp" target="_blank"
-							target="_blank" title="${food.fname }"></a></span>
-					</p>
-					</li>
+					<li><a href="selectFdetail.do?fname=${food.fname }" target="_blank" target="_blank"
+						title="${food.fname }"><img src="images/${food.fphoto }"></a>
+						<p class="P-price FontW Font16">
+							<span>￥${food.fprice }</span>
+						</p>
+						<p class="P-title">
+							<a href="detailsp.jsp" target="_blank" target="_blank"
+								title="${food.fname }">${food.fname }</a>
+						</p>
+						<p class="P-shop Overflow">
+							<span class="sa"><a href="shop.jsp" target="_blank"
+								target="_blank" title="${food.fname }"></a></span>
+						</p></li>
 				</c:forEach>
 			</ul>
 			<div class="TurnPage">
@@ -91,14 +97,14 @@
 				<span class="Bpt Block FontW Font14">热销商品推荐</span>
 				<c:forEach items="${list}" var="food">
 					<ul>
-						<li><a href="detailsp.jsp" title="${food.fname }"
+						<li><a href="selectFdetail.do?fname=${food.fname }" title="${food.fname }"
 							target="_blank"><img src="images/${food.fphoto }"></a>
 							<p>
 
 								<span class="Block FontW Font16 CorRed">￥${food.fprice }</span>
 								<span class="Block Overflow"><a href="detailsp.jsp"
-									title="${food.fname }" target="_blank">${food.fname }</a></span> <span
-									class="Block Overflow">累计销量：<i>255</i>笔
+									title="${food.fname }" target="_blank">${food.fname }</a></span><!--  <span
+									class="Block Overflow">累计销量：<i>255</i>笔 -->
 								</span>
 
 							</p></li>
